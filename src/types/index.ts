@@ -5,11 +5,14 @@
 // Content metadata extracted from HTML
 export interface ContentMetadata {
   contentId: string;
-  price: string;
+  creatorAddress: string;
+  price: number;
   asset: string;
-  creator: string;
   domain: string;
-  expiry?: number;
+  title?: string;
+  signature?: string;
+  contentHash?: string;
+  signatureExpiry?: number;
 }
 
 // Unlock record stored in chrome.storage

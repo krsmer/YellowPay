@@ -5,22 +5,279 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YellowPay</title>
   <style>
-    body {
-      width: 350px;
-      min-height: 400px;
+    * {
       margin: 0;
-      padding: 16px;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 360px;
+      min-height: 500px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+
+    .container {
+      background: white;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #FDB022 0%, #FFA500 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    /* Balance Section */
+    .balance-section {
+      padding: 20px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .balance-label {
+      font-size: 12px;
+      color: #6c757d;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .balance-amount {
+      font-size: 32px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .balance-asset {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    /* Status Section */
+    .status-section {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6c757d;
+    }
+
+    .status-dot.connected {
+      background: #10B981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Action Button */
+    .action-button {
+      margin: 20px;
+      padding: 14px 24px;
+      background: #FDB022;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(253, 176, 34, 0.3);
+    }
+
+    .action-button:hover {
+      background: #FFA500;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(253, 176, 34, 0.4);
+    }
+
+    .action-button:disabled {
+      background: #dee2e6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Recent Activity */
+    .activity-section {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .activity-item {
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 3px solid #FDB022;
+    }
+
+    .activity-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .activity-meta {
+      font-size: 12px;
+      color: #6c757d;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6c757d;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 16px 20px;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-link {
+      font-size: 12px;
+      color: #667eea;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .footer-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #FDB022;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
 <body>
-  <div id="app">
-    <header>
-      <h1>YellowPay</h1>
-      <p>Loading...</p>
-    </header>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>⚡ YellowPay</h1>
+      <p>Instant Content Micropayments</p>
+    </div>
+
+    <!-- Balance Section -->
+    <div class="balance-section">
+      <div class="balance-label">Available Balance</div>
+      <div class="balance-amount" id="balanceAmount">--</div>
+      <div class="balance-asset" id="balanceAsset">ytest.usd</div>
+    </div>
+
+    <!-- Status -->
+    <div class="status-section">
+      <div class="status-indicator">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Checking connection...</span>
+      </div>
+      <span id="statusSpinner" class="spinner"></span>
+    </div>
+
+    <!-- Action Button -->
+    <button class="action-button" id="actionButton" disabled>
+      <span id="buttonText">Loading...</span>
+    </button>
+
+    <!-- Recent Activity -->
+    <div class="activity-section">
+      <div class="section-title">Recent Activity</div>
+      <div id="activityList" class="activity-list">
+        <!-- Activity items will be inserted here -->
+      </div>
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-icon">📭</div>
+        <div>No recent activity</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <a href="#" class="footer-link" id="settingsLink">⚙️ Settings</a>
+      <a href="#" class="footer-link" id="creatorModeLink">👑 Creator Mode</a>
+    </div>
   </div>
+
   <script src="popup.js"></script>
 </body>
 </html>
