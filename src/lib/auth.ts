@@ -1,7 +1,7 @@
 import {
-  createAuthRequestMessage,
-  createAuthVerifyMessageFromChallenge,
-  createEIP712AuthMessageSigner
+    createAuthRequestMessage,
+    createAuthVerifyMessageFromChallenge,
+    createEIP712AuthMessageSigner
 } from '@erc7824/nitrolite';
 import { SessionKey } from '../types';
 import WebSocketManager from './websocket';
@@ -9,7 +9,7 @@ import WebSocketManager from './websocket';
 /**
  * Authentication Manager for Yellow Network
  * Handles the complete auth flow: request → challenge → verify → success
- * 
+ *
  * Based on DOC3 (Quickstart Guide) Section 3: Authentication
  */
 class AuthManager {
@@ -35,7 +35,7 @@ class AuthManager {
   /**
    * Complete authentication flow
    * Based on DOC3: Authentication section
-   * 
+   *
    * @param sessionKey - Generated session key
    * @param walletClient - Viem wallet client for signing
    * @param userAddress - User's main wallet address
@@ -98,7 +98,7 @@ class AuthManager {
       // Step 2: Wait for auth_challenge
       console.log('⏳ Step 2/3: Waiting for auth_challenge...');
       const challengeResponse = await this.waitForMessage('auth_challenge', 10000);
-      
+
       if (!challengeResponse || !challengeResponse.res || !challengeResponse.res[2]) {
         throw new Error('Invalid auth_challenge response');
       }
@@ -154,7 +154,7 @@ class AuthManager {
   private waitForConnection(timeout: number): Promise<void> {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
-      
+
       const checkConnection = () => {
         if (this.wsManager.isConnected()) {
           resolve();
